@@ -77,6 +77,34 @@ class ObjectTest extends TestCase
 
         $o = new ImmutableObject($testData);
 
-        $this->assertInstanceOf(ImmutableObject::class, $this->test);
+        $testData->test->field = 'changed';
+
+        $this->assertEquals('test', $o->test->field);
+    }
+
+    public function testArray() {
+        $testData = (object)[
+            'arr' => [
+                (object)['test' => 1],
+                (object)['test' => 2]
+            ]
+        ];
+
+        $o = new ImmutableObject($testData);
+
+        $testData->arr[0]->test = 5;
+
+        $this->assertEquals(1, $o->arr[0]->test);
+    }
+
+    public function testSetImmutable() {
+        $testData = new ImmutableObject((object)[
+            'test' => 5
+        ]);
+
+        $o = new ImmutableObject();
+        $o->with($testData);
+
+        $this->assertEquals(5, $o->test);
     }
 }

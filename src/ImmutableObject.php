@@ -15,15 +15,24 @@ final class ImmutableObject
 {
     private $init = false;
 
-    /** @var mixed */
+    /** @var object */
     private $data;
 
-    public function __construct($data) {
+    /**
+     * ImmutableObject constructor.
+     *
+     * @param object $data
+     *
+     * @throws CannotModifyException
+     */
+    public function __construct($data = null) {
         if ($this->init) {
             $this->prohibitChange();
         }
 
-        $this->data = clone $data;
+        if (isset($data)) {
+            $this->data = clone $data;
+        }
 
         $this->init = true;
     }
