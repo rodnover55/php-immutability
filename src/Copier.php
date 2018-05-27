@@ -16,9 +16,16 @@ class Copier
         $this->deepCopy = new DeepCopy(true);
 
         $this->deepCopy->addFilter(
+            new ReplaceFilter(function (ImmutableObject $value) {
+                return $value;
+            }), new PropertyTypeMatcher(ImmutableObject::class)
+        );
+
+        $this->deepCopy->addFilter(
             new ReplaceFilter(function ($value) {
                 return new ImmutableObject($value);
-            }), new PropertyTypeMatcher('stdClass'));
+            }), new PropertyTypeMatcher('stdClass')
+        );
     }
 
     public function copy($data) {

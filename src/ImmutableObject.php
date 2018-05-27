@@ -25,7 +25,7 @@ final class ImmutableObject implements ArrayAccess
     /**
      * ImmutableObject constructor.
      *
-     * @param object $data
+     * @param mixed $data
      *
      * @throws CannotModifyException
      */
@@ -35,7 +35,7 @@ final class ImmutableObject implements ArrayAccess
         }
 
         if (isset($data)) {
-            $this->data = $this->copier()->copy($data);
+            $this->data = $this->copier()->copy($this->data($data));
         }
 
         $this->init = true;
@@ -59,10 +59,15 @@ final class ImmutableObject implements ArrayAccess
 
 
     public function with($data) {
-        if (is_array($this->data) && is_array($data)) {
-            return new ImmutableObject(array_replace($this->data, $data));
-        } elseif (is_object($this->data) && is_object($data)) {
-            return new ImmutableObject((object)array_replace((array)$this->data, (array)$data));
+        $from = $this->data($this->data);
+        $to = $this->data($data);
+
+        if (is_null($from)) {
+            return new ImmutableObject($to);
+        } elseif (is_array($from) && is_array($to)) {
+            return new ImmutableObject(array_replace($from, $to));
+        } elseif (is_object($from) && is_object($to)) {
+            return new ImmutableObject((object)array_replace((array)$from, (array)$to));
         } else {
             // TODO: Разобраться с коллизией объектов и массивов. Кидать исключение о несовместимости типов
         }
@@ -101,5 +106,9 @@ final class ImmutableObject implements ArrayAccess
     public function offsetUnset($offset)
     {
         $this->prohibitChange();
+    }
+
+    protected function data($data) {
+        return($data instanceof ImmutableObject) ? $data->data : $data;
     }
 }

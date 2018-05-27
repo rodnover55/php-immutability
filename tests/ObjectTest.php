@@ -19,7 +19,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException Immutability\Exceptions\CannotModifyException
+     * @expectedException \Immutability\Exceptions\CannotModifyException
      */
     public function testSet() {
         $o1 = new ImmutableObject((object)[
@@ -44,7 +44,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException Immutability\Exceptions\CannotModifyException
+     * @expectedException \Immutability\Exceptions\CannotModifyException
      */
     public function testTwiceConstruct() {
         $o1 = new ImmutableObject((object)[
@@ -57,7 +57,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException Immutability\Exceptions\CannotModifyException
+     * @expectedException \Immutability\Exceptions\CannotModifyException
      */
     public function testUnset() {
         $o1 = new ImmutableObject((object)[
@@ -118,8 +118,8 @@ class ObjectTest extends TestCase
         ]);
 
         $o = new ImmutableObject();
-        $o->with($testData);
+        $o2 = $o->with($testData);
 
-        $this->assertEquals(5, $o->test);
+        $this->assertEquals(5, $o2->test);
     }
 }
