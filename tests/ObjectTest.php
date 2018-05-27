@@ -97,6 +97,21 @@ class ObjectTest extends TestCase
         $this->assertEquals(1, $o->arr[0]->test);
     }
 
+    public function testAssocativeArray() {
+        $testData = [
+            'arr' => [
+                'f1' => ['test' => 1],
+                'f2' => ['test' => 2]
+            ]
+        ];
+
+        $o = new ImmutableObject($testData);
+
+        $testData['arr']['f1']['test'] = 5;
+
+        $this->assertEquals(1, $o['arr']['f1']['test']);
+    }
+
     public function testSetImmutable() {
         $testData = new ImmutableObject((object)[
             'test' => 5
